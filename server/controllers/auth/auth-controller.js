@@ -188,6 +188,7 @@ const loginUser = async (req, res) => {
     // Set the JWT token in the cookie with secure configuration
     res.cookie("token", token, {
       httpOnly: true, // Prevents client-side access to the cookie
+      sameSite:"strict",
       secure: process.env.NODE_ENV === "production",  // Only true in production for HTTPS
     }).json({
       success: true,
