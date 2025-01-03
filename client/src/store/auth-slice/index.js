@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import Cookies from 'js-cookie';
 
 const initialState = {
   isAuthenticated: false,
@@ -26,6 +25,7 @@ export const registerUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "/auth/login",
+
   async (formData) => {
     const response = await axios.post(
       "http://localhost:5000/api/auth/login",
@@ -35,37 +35,14 @@ export const loginUser = createAsyncThunk(
       }
     );
 
-    if (response.data.success) {
-      // Store the token in a cookie on successful login
-      Cookies.set("token", response.data.token, { expires: 7 }); // Expires in 7 days
-    }
-
     return response.data;
   }
 );
 
-// export const loginUser = createAsyncThunk(
-//   "/auth/login",
-
-//   async (formData) => {
-//     const response = await axios.post(
-//       "http://localhost:5000/api/auth/login",
-//       formData,
-//       {
-//         withCredentials: true,
-//       }
-//     );
-
-//     return response.data;
-//   }
-// );
-
 export const logoutUser = createAsyncThunk(
   "/auth/logout",
-  async () => {
-    // Remove token from cookies
-    Cookies.remove("token");
 
+  async () => {
     const response = await axios.post(
       "http://localhost:5000/api/auth/logout",
       {},
@@ -78,67 +55,25 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
-// export const logoutUser = createAsyncThunk(
-//   "/auth/logout",
-
-//   async () => {
-//     const response = await axios.post(
-//       "http://localhost:5000/api/auth/logout",
-//       {},
-//       {
-//         withCredentials: true,
-//       }
-//     );
-
-//     return response.data;
-//   }
-// );
-
-// export const checkAuth = createAsyncThunk(
-//   "/auth/checkauth",
-
-//   async () => {
-//     const response = await axios.get(
-//       "http://localhost:5000/api/auth/check-auth",
-//       {
-//         withCredentials: true,
-//         headers: {
-//           "Cache-Control":
-//             "no-store, no-cache, must-revalidate, proxy-revalidate",
-//         },
-//       }
-//     );
-
-//     return response.data;
-//   }
-// );
-
 export const checkAuth = createAsyncThunk(
   "/auth/checkauth",
+
   async () => {
-    // Get the token from the cookie
-    const token = Cookies.get("token");
-
-    if (!token) {
-      // If no token exists, return early with an error or indicate the user is not authenticated
-      return { success: false };
-    }
-
-    // If token exists, make the API call to verify its validity
     const response = await axios.get(
       "http://localhost:5000/api/auth/check-auth",
       {
+        withCredentials: true,
         headers: {
-          Authorization: `Bearer ${token}`,  // Pass token in the Authorization header
           "Cache-Control":
             "no-store, no-cache, must-revalidate, proxy-revalidate",
         },
       }
     );
 
-    return response.data;  // Return the response from the API call
+    return response.data;
   }
 );
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
