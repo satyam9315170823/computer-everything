@@ -2,6 +2,7 @@ import ProductFilter from "@/components/shopping-view/filter";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { Button } from "@/components/ui/button";
+import Footer from "@/components/shopping-view/footer";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -146,6 +147,7 @@ function ShoppingListing() {
   console.log(productList, "productListproductListproductList");
 
   return (
+    <>
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
       <ProductFilter filters={filters} handleFilter={handleFilter} />
       <div className="bg-background w-full rounded-lg shadow-sm">
@@ -199,6 +201,11 @@ function ShoppingListing() {
         productDetails={productDetails}
       />
     </div>
+
+    <div>  <Footer/></div>
+    </>
+
+   
   );
 }
 
